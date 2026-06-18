@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vocabolario dello Startupper</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      background: #fff;
+      color: #111;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 5rem;
+    }
+
+    header { margin-bottom: 2.5rem; }
+
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 500;
+      margin-bottom: 0.4rem;
+    }
+
+    header p {
+      font-size: 0.95rem;
+      color: #666;
+    }
+
+    header a {
+      color: #111;
+      font-size: 0.85rem;
+      text-decoration: none;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .search-wrap {
+      position: relative;
+      margin-bottom: 2.5rem;
+    }
+
+    .search-wrap svg {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      stroke: #aaa;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      pointer-events: none;
+    }
+
+    #search {
+      width: 100%;
+      padding: 0.6rem 0.75rem 0.6rem 2.25rem;
+      font-size: 0.95rem;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      outline: none;
+      background: #fafafa;
+      color: #111;
+      transition: border-color 0.15s;
+    }
+
+    #search:focus { border-color: #aaa; background: #fff; }
+    #search::placeholder { color: #bbb; }
+
+    .section-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #bbb;
+      margin: 2rem 0 0.5rem;
+    }
+
+    .term {
+      border-top: 1px solid #f0f0f0;
+      padding: 0.85rem 0;
+    }
+
+    .term:last-child { border-bottom: 1px solid #f0f0f0; }
+
+    .term-name {
+      font-size: 0.95rem;
+      font-weight: 500;
+      margin-bottom: 3px;
+    }
+
+    .term-def {
+      font-size: 0.88rem;
+      color: #555;
+      line-height: 1.65;
+    }
+
+    .term-example {
+      font-size: 0.83rem;
+      color: #999;
+      margin-top: 4px;
+      font-style: italic;
+    }
+
+    .term-link {
+      display: inline-block;
+      margin-top: 5px;
+      font-size: 0.8rem;
+      color: #888;
+      text-decoration: none;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .term-link:hover { color: #333; border-color: #aaa; }
+
+    mark {
+      background: #fef08a;
+      border-radius: 2px;
+      padding: 0 1px;
+    }
+
+    .empty {
+      font-size: 0.9rem;
+      color: #bbb;
+      padding: 2rem 0;
+    }
+
+    .count {
+      font-size: 0.8rem;
+      color: #bbb;
+      margin-bottom: 0.5rem;
+    }
+
+    footer {
+      margin-top: 4rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #f0f0f0;
+      font-size: 0.8rem;
+      color: #bbb;
+    }
+
+    footer a { color: #bbb; }
+
+    @media (prefers-color-scheme: dark) {
+      body { background: #0f0f0f; color: #e8e8e8; }
+      #search { background: #1a1a1a; color: #e8e8e8; border-color: #2a2a2a; }
+      #search:focus { background: #1f1f1f; border-color: #444; }
+      #search::placeholder { color: #555; }
+      .search-wrap svg { stroke: #555; }
+      .term { border-top-color: #1e1e1e; }
+      .term:last-child { border-bottom-color: #1e1e1e; }
+      .term-def { color: #999; }
+      .term-example { color: #666; }
+      .term-link { color: #666; border-color: #2a2a2a; }
+      .term-link:hover { color: #aaa; border-color: #555; }
+      .section-label { color: #444; }
+      footer { border-top-color: #1e1e1e; }
+      header a { color: #e8e8e8; border-color: #333; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>Vocabolario dello startupper</h1>
+    <p>Oltre 60 termini del mondo startup, spiegati in italiano. <a href="https://diegomontanari.com" target="_blank">diegomontanari.com</a></p>
+  </header>
+
+  <div class="search-wrap">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+    <input type="text" id="search" placeholder="Cerca un termine..." autocomplete="off" />
+  </div>
+
+  <div class="count" id="count"></div>
+  <div id="results"></div>
+
+  <footer>
+    Fonti: <a href="https://www.startupfinance.it/glossario-startup-finanza-2025" target="_blank">StartupFinance</a> &middot; <a href="https://www.ventivegroup.com/glossario/" target="_blank">Ventive Group</a> &middot; <a href="https://startupedia.net/it/che-cose/" target="_blank">Startupedia</a>
+  </footer>
+
+</div>
+
+<script>
+const data = [
+  {
+    section: "Startup & Business",
+    terms: [
+      { name: "Startup", def: "Impresa giovane con alto potenziale di crescita scalabile, orientata a trovare un modello di business ripetibile. Si distingue da una piccola impresa tradizionale per la velocità con cui punta a crescere e per l'incertezza del mercato in cui opera." },
+      { name: "MVP (Minimum Viable Product)", def: "Versione minima di un prodotto con le funzionalità essenziali per testare un'ipotesi di mercato. Non è il prodotto finale: è lo strumento più veloce per capire se qualcuno ha davvero il problema che pensi di risolvere.", example: "Esempio: un foglio Google condiviso prima di costruire un'app." },
+      { name: "MLP (Minimum Lovable Product)", def: "Evoluzione del concetto di MVP: non basta che funzioni, deve essere abbastanza buono da essere amato. L'MVP ti dice se il problema esiste; l'MLP ti dice se la tua soluzione vale la pena di essere scelta rispetto alle alternative." },
+      { name: "Pivot", def: "Cambiamento di direzione strategica mantenendo le risorse accumulate. Non significa ricominciare da zero: significa usare ciò che hai imparato per andare in una direzione diversa.", example: "Esempio: Instagram era originariamente un'app per fare check-in nei luoghi." },
+      { name: "Bootstrapping", def: "Costruire e far crescere una startup usando solo risorse proprie, senza investitori esterni. Implica crescita più lenta ma pieno controllo. L'opposto è il modello VC-funded." },
+      { name: "Scalabilità", def: "Capacità di un business di crescere in modo sproporzionato rispetto ai costi. Un software può servire 10 o 10 milioni di utenti con infrastruttura simile: è scalabile. Un ristorante no." },
+      { name: "Lean Startup", def: "Metodologia di sviluppo basata su cicli rapidi build-measure-learn: costruisci qualcosa, misura i risultati, impara e itera. L'obiettivo è ridurre al minimo gli sprechi e validare le ipotesi il prima possibile." },
+      { name: "Incubatore", def: "Struttura che supporta le startup nelle fasi iniziali offrendo spazi, mentoring, servizi e networking. Di solito non investe direttamente." },
+      { name: "Acceleratore", def: "Programma intensivo a tempo determinato (3-6 mesi) che aiuta le startup a crescere velocemente, spesso in cambio di una piccola quota equity. Y Combinator è il più famoso al mondo." },
+      { name: "Business Model", def: "Il modo in cui un'azienda crea valore, lo distribuisce ai clienti e lo cattura in forma di ricavi. Risponde alla domanda: come guadagni?" },
+      { name: "Founder", def: "Chi ha fondato la startup. Nei team early-stage, il founder è spesso sia l'esecutore che il visionario. Il rischio e la responsabilità sono suoi." },
+      { name: "Co-founder", def: "Cofondatore. La scelta del co-founder è spesso definita la decisione più importante nella vita di una startup." },
+      { name: "Proof of Concept (PoC)", def: "Dimostrazione preliminare che un'idea è tecnicamente realizzabile. Viene prima dell'MVP: non testa il mercato, ma la fattibilità." },
+      { name: "Disruption", def: "Quando un nuovo prodotto o modello di business trasforma radicalmente un mercato esistente, spesso partendo dal basso.", example: "Esempio: Netflix ha distrutto Blockbuster." },
+      { name: "Unicorno", def: "Startup con valutazione superiore a 1 miliardo di dollari prima della quotazione in borsa. Il termine è stato coniato perché, al momento della sua introduzione, era considerato raro quanto un unicorno." },
+      { name: "B2B / B2C / B2G", def: "Business-to-Business (vendi ad altre aziende), Business-to-Consumer (vendi al consumatore finale), Business-to-Government (vendi alla pubblica amministrazione). Definisce il tipo di cliente." },
+      { name: "SaaS (Software as a Service)", def: "Modello in cui il software viene venduto come abbonamento via cloud, non come prodotto da installare.", example: "Esempi: Notion, Figma, Slack." },
+      { name: "Freemium", def: "Modello in cui il prodotto base è gratuito e le funzionalità avanzate sono a pagamento. Serve per acquisire utenti velocemente e convertirne una parte in clienti paganti." },
+      { name: "No-Code / Low-Code", def: "Strumenti che permettono di costruire prodotti digitali senza (o con poco) codice. Abbassano la barriera tecnica per chi ha idee ma non sa programmare." },
+    ]
+  },
+  {
+    section: "Metriche & KPI",
+    terms: [
+      { name: "CAC (Customer Acquisition Cost)", def: "Costo medio sostenuto per acquisire un nuovo cliente. Include marketing, vendite, ads. Formula: totale speso per acquisizione / numero di nuovi clienti nel periodo." },
+      { name: "LTV (Lifetime Value)", def: "Valore totale generato da un cliente durante tutta la sua relazione con l'azienda. Il rapporto LTV/CAC è uno degli indicatori di salute più importanti: idealmente superiore a 3." },
+      { name: "MRR (Monthly Recurring Revenue)", def: "Ricavi ricorrenti mensili. Il KPI fondamentale dei business in abbonamento. Mostra quanto guadagni in modo prevedibile ogni mese." },
+      { name: "ARR (Annual Recurring Revenue)", def: "MRR moltiplicato per 12. Usato per valutare la dimensione di un'azienda SaaS o subscription-based." },
+      { name: "ARPU (Average Revenue Per User)", def: "Ricavo medio per utente nel periodo di riferimento. Aiuta a capire quanto vale in media ogni singolo utente." },
+      { name: "Churn Rate", def: "Percentuale di clienti o ricavi persi in un dato periodo. Un churn alto significa che il prodotto non mantiene le promesse. Formula: clienti persi / clienti a inizio periodo × 100." },
+      { name: "Retention Rate", def: "L'opposto del churn: percentuale di clienti che restano. Una retention alta è il segnale più forte che il prodotto funziona." },
+      { name: "Burn Rate", def: "Velocità con cui una startup consuma la cassa disponibile, solitamente misurata al mese.", example: "Esempio: se hai 500.000€ e spendi 50.000€/mese, il tuo burn rate è 50k." },
+      { name: "Runway", def: "Quanto tempo hai prima di esaurire la liquidità al ritmo attuale di burn. Formula: cassa disponibile / burn rate mensile.", example: "Con 500k e 50k/mese: 10 mesi di runway." },
+      { name: "Gross Margin", def: "Margine lordo: ricavi meno costi diretti di produzione. Indica quanto è efficiente il business al netto dei costi variabili, prima delle spese operative." },
+      { name: "Break-Even Point", def: "Il punto in cui i ricavi coprono esattamente tutti i costi. Superato questo punto, l'azienda inizia a generare profitto." },
+      { name: "Traction", def: "Prova concreta che il mercato vuole il tuo prodotto: utenti attivi, ricavi, crescita settimana su settimana. È ciò che gli investitori cercano prima di tutto nei pitch early-stage." },
+      { name: "North Star Metric", def: "La singola metrica che meglio rappresenta il valore che il prodotto genera per i suoi utenti. Tutto il team dovrebbe lavorare per farla crescere.", example: "Esempio: per Airbnb è il numero di notti prenotate." },
+      { name: "NPS (Net Promoter Score)", def: "Misura la probabilità che un cliente raccomandi il prodotto. Si calcola chiedendo \"Da 0 a 10, quanto consiglieresti il nostro prodotto?\" I promotori (9-10) meno i detrattori (0-6) danno il punteggio." },
+      { name: "K-Factor (Virality)", def: "Misura il potenziale virale di un prodotto: quanti nuovi utenti porta ogni utente esistente. K > 1 significa crescita virale esponenziale." },
+      { name: "Retention Curve", def: "Grafico che mostra come la percentuale di utenti attivi decresce nel tempo. Una curva che si stabilizza indica che gli utenti trovano valore continuo nel prodotto." },
+      { name: "ROI (Return on Investment)", def: "Ritorno sull'investimento. Formula: (guadagno - costo) / costo × 100. Misura l'efficienza di qualsiasi investimento." },
+      { name: "ROAS (Return on Ad Spend)", def: "Ritorno sulla spesa pubblicitaria. Formula: ricavi generati dagli annunci / costo degli annunci. Indica quanto ogni euro speso in ads genera in ricavi." },
+      { name: "KPI (Key Performance Indicator)", def: "Gli indicatori chiave che misuri per valutare la salute e il progresso del business. Non tutte le metriche sono KPI: sono quelli che contano davvero per il tuo specifico obiettivo." },
+    ]
+  },
+  {
+    section: "Fundraising & Investimenti",
+    terms: [
+      { name: "Pre-Seed", def: "Il primo round di finanziamento, solitamente da FFF (friends, family, fools), angel investor o acceleratori. Si finanzia un'idea e un team, non un prodotto già sviluppato." },
+      { name: "Seed Round", def: "Round successivo al pre-seed. A questo punto esiste un MVP e qualche segnale di mercato. Gli importi variano da poche centinaia di migliaia a qualche milione di euro." },
+      { name: "Serie A / B / C", def: "Round successivi di crescita. La Serie A serve a scalare un modello che funziona. La Serie B a espanderlo. La Serie C in poi è crescita aggressiva verso l'exit o la quotazione." },
+      { name: "Venture Capital (VC)", def: "Fondo che investe in startup ad alto rischio e alto potenziale in cambio di equity. I VC fanno molte scommesse sapendo che solo poche porteranno rendimenti enormi." },
+      { name: "Angel Investor", def: "Individuo che investe capitali propri in startup early-stage, spesso in cambio di equity e a volte offrendo anche mentoring. Di solito investe prima dei VC.", link: { text: "Approfondisci", url: "https://www.startupfinance.it/convincere-angel-investor-startup" } },
+      { name: "FFF (Friends, Family, Fools)", def: "I primi tre tipi di finanziatori di una startup, così chiamati perché investono prima che ci sia qualsiasi prova di funzionamento. Il termine è ironico ma reale." },
+      { name: "Equity", def: "Quota di proprietà dell'azienda. Cedere equity a un investitore significa dargli una percentuale della società in cambio di capitali." },
+      { name: "Dilution", def: "Quando si raccolgono nuovi capitali emettendo nuove quote, le quote esistenti si diluiscono: la percentuale di ogni socio diminuisce. Non è necessariamente negativo se la valutazione cresce. Esistono due meccanismi: emissione di nuove quote (i soldi entrano nell'azienda) o cessione di quote esistenti (i soldi vanno ai soci).", example: "Esempio: socio 1 al 60%, socio 2 al 40%. Entra un investitore con il 50%. Risultato: socio 1 → 30%, socio 2 → 20%, investitore → 50%." },
+      { name: "Valuation", def: "Valutazione dell'azienda, ovvero quanto vale secondo chi investe. Pre-money è la valutazione prima del round; post-money include i nuovi capitali.", link: { text: "Approfondisci", url: "https://www.startupfinance.it/metodi-valutazione-aziendale-tecniche-e-esempi" } },
+      { name: "Cap Table (Capitalization Table)", def: "Tabella che mostra la distribuzione delle quote societarie tra tutti i soci: founder, investitori, dipendenti con stock option. È il documento che dice \"chi possiede quanto\"." },
+      { name: "Term Sheet", def: "Documento non vincolante che riassume i termini principali di un accordo di investimento. È il punto di partenza della negoziazione tra startup e investitore.", link: { text: "Approfondisci", url: "https://www.startupfinance.it/term-sheet-errore-comprensione-negoziazione-2025" } },
+      { name: "Due Diligence", def: "Processo di analisi approfondita che un investitore fa prima di chiudere un deal: verifica numeri, legali, tecnologia, team, mercato. Può durare settimane." },
+      { name: "SAFE Note (Simple Agreement for Future Equity)", def: "Strumento di investimento semplice che converte il capitale investito in equity in un round futuro, senza valutazione immediata. Creato da Y Combinator per semplificare i round early-stage." },
+      { name: "Convertible Note", def: "Prestito che si trasforma in equity a un round successivo, solitamente con uno sconto sul prezzo delle nuove quote o con un cap sulla valutazione massima di conversione." },
+      { name: "Vesting", def: "Meccanismo per cui le quote di un founder o dipendente maturano nel tempo, non vengono assegnate tutte subito. Protegge la startup se un socio lascia prematuramente." },
+      { name: "Cliff", def: "Periodo iniziale del vesting (di solito 12 mesi) durante il quale non matura nulla. Se lasci prima del cliff, non hai diritto ad alcuna quota." },
+      { name: "Vesting Schedule", def: "Il piano temporale con cui matura l'equity di founder e dipendenti. Tipico: 4 anni con 1 anno di cliff. Significa: nulla al mese 11, 25% al mese 12 (il cliff), poi il restante 75% in 36 rate mensili uguali fino al mese 48." },
+      { name: "Liquidation Preference", def: "Clausola che stabilisce l'ordine e l'importo con cui vengono distribuiti i proventi in caso di exit o liquidazione. Protegge gli investitori, può penalizzare i founder.", link: { text: "Approfondisci", url: "https://www.startupfinance.it/liquidation-preference-negoziazione-consigli-2025" } },
+      { name: "Exit", def: "Evento in cui i founder e gli investitori monetizzano la loro quota: acquisizione da parte di un'altra azienda o quotazione in borsa (IPO)." },
+      { name: "IPO (Initial Public Offering)", def: "Prima quotazione dell'azienda in borsa. Permette di raccogliere grandi capitali e offrire liquidità agli azionisti esistenti." },
+      { name: "Drag Along", def: "Clausola che obbliga i soci di minoranza a vendere le proprie quote se la maggioranza decide di accettare un'offerta di acquisizione." },
+      { name: "Tag Along", def: "Clausola che permette ai soci di minoranza di partecipare a una vendita alle stesse condizioni dei soci di maggioranza." },
+      { name: "Contabilità Ordinaria / Semplificata", def: "Regimi fiscali diversi in base a dimensione e forma giuridica dell'azienda. La contabilità ordinaria è obbligatoria per le società di capitali; quella semplificata è accessibile alle imprese più piccole sotto certi limiti di ricavi.", link: { text: "Approfondisci", url: "https://www.startupfinance.it/contabilita-startup-gli-errori-piu-comuni" } },
+    ]
+  },
+  {
+    section: "Mindset & Cultura",
+    terms: [
+      { name: "Skin in the Game", def: "Principio reso popolare da Nassim Taleb: chi prende decisioni deve condividerne le conseguenze. Un founder con skin in the game ha messo soldi, tempo e reputazione nel progetto." },
+      { name: "First Principles Thinking", def: "Ragionare a partire dai principi fondamentali, senza assumere come vere le convenzioni esistenti. Invece di copiare come fanno gli altri, chiedi \"perché si fa così?\" e ricostruisci da zero." },
+      { name: "Founder Mindset", def: "Mentalità di chi si assume responsabilità totale del risultato, senza aspettare istruzioni. Caratterizzato da bias verso l'azione, alta tolleranza all'incertezza e ossessione per il problema del cliente." },
+      { name: "Ownership Mentality", def: "Lavorare come se l'azienda fosse tua, anche se non lo è. Si manifesta nell'attenzione ai costi, nella proattività e nel non aspettare che qualcun altro risolva i problemi." },
+      { name: "Default Alive / Default Dead", def: "Termini di Paul Graham (YC): una startup è \"default alive\" se, mantenendo il tasso di crescita attuale, raggiungerà il break-even prima di esaurire la cassa. Altrimenti è \"default dead\"." },
+      { name: "Ratchet Effect", def: "Una volta raggiunto un certo livello, non si torna indietro. In ambito fundraising: ogni round alza la valutazione e questa diventa un pavimento — scendere sotto manda un segnale catastrofico al mercato." },
+      { name: "Speed as a Habit", def: "La velocità non è solo una tattica, è una cultura. Le startup che vincono sono quelle che iterano più velocemente dei competitor. Ogni giorno conta." },
+      { name: "High-Signal Communication", def: "Comunicare in modo denso e preciso, eliminando il rumore. L'opposto delle riunioni inutili e delle email ridondanti." },
+      { name: "10x Thinking", def: "Pensare in termini di miglioramento 10 volte superiore, non del 10%. Forza a ripensare le soluzioni da zero invece di ottimizzare l'esistente." },
+    ]
+  },
+  {
+    section: "Prodotto & Mercato",
+    terms: [
+      { name: "PMF (Product-Market Fit)", def: "Il momento in cui il prodotto soddisfa una domanda reale e forte del mercato. Marc Andreessen lo descrive così: \"senti che il mercato ti sta trascinando\". Prima del PMF si sopravvive. Dopo, si scala." },
+      { name: "ICP (Ideal Customer Profile)", def: "Il profilo del cliente ideale: chi trae più valore dal prodotto, paga di più, fa meno churn e porta altri clienti. Costruire per l'ICP prima di espandersi è una delle regole del go-to-market." },
+      { name: "Moat (Fossato competitivo)", def: "Il vantaggio competitivo difendibile di un'azienda. Può essere tecnologico, di brand, di rete (network effect), di scala. Un'azienda senza moat è copiabile." },
+      { name: "Go-To-Market Strategy (GTM)", def: "Piano per portare un prodotto sul mercato: a chi, come, con quale messaggio, attraverso quali canali. Definisce come acquisisci i primi clienti." },
+      { name: "Value Proposition", def: "La promessa di valore al cliente: perché dovrebbe scegliere te rispetto a tutte le alternative. Deve essere specifica, credibile e rilevante per il tuo ICP." },
+      { name: "Growth Loop", def: "Meccanismo in cui la crescita si autoalimenta: nuovi utenti portano altri nuovi utenti, generando un ciclo virtuoso. Più potente e sostenibile dell'acquisizione a pagamento." },
+      { name: "Funnel di Conversione", def: "Il percorso che porta un potenziale cliente da \"non ti conosce\" a \"pagante fedele\". Si divide solitamente in awareness, considerazione, decisione, fidelizzazione." },
+      { name: "Growth Hacking", def: "Tecniche creative e data-driven per far crescere un prodotto rapidamente, spesso con budget limitato. Non è un trucco: è sperimentazione sistematica su tutti i touchpoint del funnel." },
+      { name: "A/B Testing", def: "Confronto tra due versioni di un elemento (pagina, titolo, CTA) per capire quale performa meglio. Base del decision-making data-driven." },
+      { name: "Elevator Pitch", def: "Descrizione della startup in 60-90 secondi. Deve rispondere a: qual è il problema, chi lo ha, come lo risolvi, perché tu." },
+      { name: "Waterfall (sviluppo)", def: "Approccio sequenziale allo sviluppo software: analisi → design → sviluppo → test → rilascio. Ogni fase inizia solo quando la precedente è completa. Considerato obsoleto per le startup perché non permette di correggere il tiro in corsa." },
+      { name: "Waterfall (liquidazione)", def: "L'ordine con cui vengono distribuiti i proventi in un'exit: prima i creditori, poi gli investitori con liquidation preference, poi i founder. Strettamente legato alla clausola di Liquidation Preference." },
+    ]
+  },
+  {
+    section: "Ruoli & Struttura",
+    terms: [
+      { name: "CEO (Chief Executive Officer)", def: "Amministratore delegato. Responsabile della visione, della strategia e delle decisioni finali. Nei team early-stage, spesso anche il principale venditore." },
+      { name: "CTO (Chief Technology Officer)", def: "Responsabile della tecnologia e del prodotto. Traduce la visione del CEO in architettura e roadmap tecnica." },
+      { name: "CFO (Chief Financial Officer)", def: "Direttore finanziario. Gestisce contabilità, budget, fundraising e reporting agli investitori." },
+      { name: "COO (Chief Operating Officer)", def: "Direttore operativo. Trasforma la strategia in esecuzione quotidiana. Spesso il \"how\" mentre il CEO è il \"why\"." },
+      { name: "Stakeholder", def: "Chiunque abbia un interesse nel progetto: investitori, dipendenti, clienti, partner, comunità. Gestire gli stakeholder significa allineare aspettative e interessi diversi." },
+      { name: "NDA (Non-Disclosure Agreement)", def: "Accordo di riservatezza. Prima di condividere informazioni sensibili con partner, investitori o fornitori, si firma un NDA per proteggersi legalmente." },
+      { name: "Stock Option", def: "Diritto di acquistare quote dell'azienda a un prezzo prefissato in futuro. Strumento per attrarre talento senza pagare stipendi di mercato nelle fasi iniziali." },
+    ]
+  },
+];
+
+function hl(text, q) {
+  if (!q) return text;
+  const re = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+  return text.replace(re, '<mark>$1</mark>');
+}
+
+function render(q) {
+  const lq = q.toLowerCase();
+  const container = document.getElementById('results');
+  const countEl = document.getElementById('count');
+  let html = '';
+  let total = 0;
+
+  data.forEach(sec => {
+    const filtered = q
+      ? sec.terms.filter(t => t.name.toLowerCase().includes(lq) || t.def.toLowerCase().includes(lq))
+      : sec.terms;
+    if (!filtered.length) return;
+    total += filtered.length;
+    html += `<div class="section-label">${sec.section}</div>`;
+    filtered.forEach(t => {
+      html += `<div class="term">
+        <div class="term-name">${hl(t.name, q)}</div>
+        <div class="term-def">${hl(t.def, q)}</div>
+        ${t.example ? `<div class="term-example">${hl(t.example, q)}</div>` : ''}
+        ${t.link ? `<a class="term-link" href="${t.link.url}" target="_blank">${t.link.text} ↗</a>` : ''}
+      </div>`;
+    });
+  });
+
+  if (!total) {
+    html = `<p class="empty">Nessun termine trovato per "${q}".</p>`;
+    countEl.textContent = '';
+  } else {
+    countEl.textContent = q ? `${total} risultat${total === 1 ? 'o' : 'i'}` : `${total} termini`;
+  }
+
+  container.innerHTML = html;
+}
+
+render('');
+document.getElementById('search').addEventListener('input', e => render(e.target.value.trim()));
+</script>
+</body>
+</html>
