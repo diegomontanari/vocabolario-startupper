@@ -219,7 +219,8 @@ const data = [
   {
     section: "Metriche & KPI",
     terms: [
-      { name: "CAC (Customer Acquisition Cost)", def: "Costo medio sostenuto per acquisire un nuovo cliente. Include marketing, vendite, ads. Formula: totale speso per acquisizione / numero di nuovi clienti nel periodo." },
+      { name: "CAC (Customer Acquisition Cost)", def: "Costo medio sostenuto per acquisire un nuovo cliente. Include marketing, vendite, ads. Formula: totale speso per acquisizione / numero di nuovi clienti nel periodo.", example: "Attenzione, non confonderlo con il costo marginale: il CAC è quanto mi costa averlo, il costo marginale è quanto mi costa tenerlo." },
+      { name: "Costo marginale", def: "Quanto costa servire un utente (o un'unità) in più, una volta che c'è: per un'app sono server, dati, notifiche, supporto. Per il software è molto basso, ed è il senso di \"la scalabilità è intrinseca\". Non è esattamente zero: certi costi crescono con gli utenti.", why: "Perché in economia “marginale” vuol dire “l’ultimo pezzo in più”. Il costo marginale è quanto costa produrre un’unità in più rispetto a quelle che hai già prodotto, cioè il costo del margine, del bordo, della produzione. Esempio: una pizzeria ha già forno e affitto. Fare una pizza in più costa solo farina, mozzarella e pomodoro: quello è il costo marginale. Un’app ha già i server e il codice, quindi servire un utente in più costa pochissimo.", example: "Attenzione, non confonderlo con il CAC: il costo marginale è quanto mi costa tenerlo, il CAC è quanto mi costa averlo." },
       { name: "LTV (Lifetime Value)", def: "Valore totale generato da un cliente durante tutta la sua relazione con l'azienda. Il rapporto LTV/CAC è uno degli indicatori di salute più importanti: idealmente superiore a 3." },
       { name: "MRR (Monthly Recurring Revenue)", def: "Ricavi ricorrenti mensili. Il KPI fondamentale dei business in abbonamento. Mostra quanto guadagni in modo prevedibile ogni mese." },
       { name: "ARR (Annual Recurring Revenue)", def: "MRR moltiplicato per 12. Usato per valutare la dimensione di un'azienda SaaS o subscription-based." },
@@ -338,6 +339,7 @@ function render(q) {
       html += `<div class="term">
         <div class="term-name">${hl(t.name, q)}</div>
         <div class="term-def">${hl(t.def, q)}</div>
+        ${t.why ? `<div class="term-def">${hl(t.why, q)}</div>` : ''}
         ${t.example ? `<div class="term-example">${hl(t.example, q)}</div>` : ''}
         ${t.link ? `<a class="term-link" href="${t.link.url}" target="_blank">${t.link.text} ↗</a>` : ''}
       </div>`;
